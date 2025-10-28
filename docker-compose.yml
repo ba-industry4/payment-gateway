@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: payment-gateway-db
+    environment:
+      POSTGRES_DB: payment_gateway
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - payment-network
+
+  payment-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: payment-gateway-app
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: payment_gateway
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: YzU3YmFhOTktNmI3ZS00ZmExLTkwMzUtMTM4OTQxNzQyZmE1LWFiYzEyMy1kZWY0NTYtZ2hpNzg5
+      STRIPE_API_KEY: sk_test_your_stripe_api_key
+      STRIPE_WEBHOOK_SECRET: whsec_your_webhook_secret
+      PAYPAL_CLIENT_ID: your_paypal_client_id
+      PAYPAL_CLIENT_SECRET: your_paypal_client_secret
+      PAYPAL_MODE: sandbox
+      SHOW_SQL: false
+      LOG_LEVEL: INFO
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - payment-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  payment-network:
+    driver: bridge

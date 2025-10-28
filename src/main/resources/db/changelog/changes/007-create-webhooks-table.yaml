@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-create-webhooks-table
+      author: payment-gateway
+      changes:
+        - createTable:
+            tableName: webhooks
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: merchant_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_webhooks_merchant_id
+                    references: merchants(id)
+                    deleteCascade: true
+              - column:
+                  name: url
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: secret
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: events
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: retry_count
+                  type: int
+                  defaultValueNumeric: 3
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: idx_webhooks_merchant_id
+            tableName: webhooks
+            columns:
+              - column:
+                  name: merchant_id
