@@ -72,8 +72,10 @@ public class PayPalPaymentProvider implements PaymentProviderStrategy {
     @Override
     public String processRefund(String transactionId, BigDecimal amount, String reason) {
         try {
+            // Note: In a real implementation, you should retrieve the original transaction
+            // to get the correct currency. This is a simplified version.
             Amount refundAmount = new Amount();
-            refundAmount.setCurrency("USD");
+            refundAmount.setCurrency("USD"); // TODO: Should be retrieved from original transaction
             refundAmount.setTotal(amount.toString());
 
             RefundRequest refundRequest = new RefundRequest();

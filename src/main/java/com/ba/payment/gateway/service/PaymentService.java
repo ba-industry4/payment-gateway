@@ -70,8 +70,10 @@ public class PaymentService {
 
         } catch (Exception e) {
             transaction.setStatus("FAILED");
-            transaction.setFailureReason(e.getMessage());
-            log.error("Payment processing failed: {}", e.getMessage());
+            transaction.setFailureReason("Payment processing failed");
+            log.error("Payment processing failed for transaction {}: {}", transaction.getTransactionId(), e.getClass().getSimpleName());
+            // Log detailed error separately for debugging (should be logged to secure storage)
+            log.debug("Payment processing error details", e);
         }
 
         return transactionRepository.save(transaction);

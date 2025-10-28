@@ -38,7 +38,7 @@ public class PaymentController {
     @GetMapping("/{transactionId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MERCHANT', 'API_USER')")
     public ResponseEntity<Transaction> getTransaction(@PathVariable String transactionId) {
-        // This would be implemented with proper service layer
-        return ResponseEntity.ok(null);
+        // TODO: Implement transaction retrieval logic using TransactionService
+        throw new UnsupportedOperationException("Transaction retrieval not yet implemented");
     }
 }

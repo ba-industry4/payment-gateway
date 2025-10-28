@@ -20,7 +20,9 @@ spring:
 
 security:
   jwt:
-    secret-key: ${JWT_SECRET:your-256-bit-secret-key-change-this-in-production-environment-for-security}
+    # IMPORTANT: Change this secret key in production! Use a strong 256-bit base64 encoded key
+    # Generate with: openssl rand -base64 32
+    secret-key: ${JWT_SECRET:Q0hBTkdFLVRISVMtU0VDUkVULUtFWS1JTi1QUk9EVUNUSU9OLVVTRS1TVFJPTkctS0VZ}
     expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
     refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000} # 7 days in milliseconds
 
