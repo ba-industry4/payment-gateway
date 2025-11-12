@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:payment_gateway}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    password: ${DB_PASSWORD:12345}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -36,7 +36,7 @@ payment:
     mode: ${PAYPAL_MODE:sandbox} # sandbox or live
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8996}
   error:
     include-message: always
     include-binding-errors: always
