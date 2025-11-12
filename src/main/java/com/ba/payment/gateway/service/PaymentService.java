@@ -36,6 +36,11 @@ public class PaymentService {
             throw new IllegalArgumentException("Currency not supported by provider: " + request.getCurrency());
         }
 
+        // Determine redirect URLs - use request URLs or fallback to merchant defaults
+        String redirectUrl = determineRedirectUrl(request.getRedirectUrl(), merchant.getDefaultRedirectUrl());
+        String successUrl = determineRedirectUrl(request.getSuccessUrl(), merchant.getDefaultRedirectUrl());
+        String failureUrl = determineRedirectUrl(request.getFailureUrl(), merchant.getDefaultRedirectUrl());
+
         // Create transaction record
         Transaction transaction = Transaction.builder()
                 .transactionId(UUID.randomUUID().toString())
@@ -48,6 +53,9 @@ public class PaymentService {
                 .description(request.getDescription())
                 .customerEmail(request.getCustomerEmail())
                 .customerName(request.getCustomerName())
+                .redirectUrl(redirectUrl)
+                .successUrl(successUrl)
+                .failureUrl(failureUrl)
                 .build();
 
         transaction = transactionRepository.save(transaction);
@@ -77,5 +85,15 @@ public class PaymentService {
         }
 
         return transactionRepository.save(transaction);
+    }
+
+    /**
+     * Determines the redirect URL to use, preferring the request URL over the merchant default
+     */
+    private String determineRedirectUrl(String requestUrl, String merchantDefaultUrl) {
+        if (requestUrl != null && !requestUrl.isEmpty()) {
+            return requestUrl;
+        }
+        return merchantDefaultUrl;
     }
 }

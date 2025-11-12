@@ -6,22 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Map;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentRequest {
+public class PaymentResponse {
+    private String transactionId;
+    private String status;
     private BigDecimal amount;
     private String currency;
     private String provider;
-    private String paymentMethodToken;
+    private String providerTransactionId;
     private String description;
-    private String customerEmail;
-    private String customerName;
-    private Map<String, String> metadata;
     private String redirectUrl;
-    private String successUrl;
-    private String failureUrl;
+    private String failureReason;
+    private LocalDateTime processedAt;
+    private LocalDateTime createdAt;
 }

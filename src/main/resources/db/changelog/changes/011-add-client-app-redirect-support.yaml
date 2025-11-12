@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 011-add-client-app-redirect-support
+      author: payment-gateway
+      changes:
+        - addColumn:
+            tableName: merchants
+            columns:
+              - column:
+                  name: application_type
+                  type: varchar(100)
+                  remarks: "Type of client application (e.g., WEB, MOBILE, POS)"
+              - column:
+                  name: default_redirect_url
+                  type: varchar(500)
+                  remarks: "Default redirect URL for this merchant's application"
+              - column:
+                  name: default_callback_url
+                  type: varchar(500)
+                  remarks: "Default callback URL for payment notifications"
+        - addColumn:
+            tableName: transactions
+            columns:
+              - column:
+                  name: redirect_url
+                  type: varchar(500)
+                  remarks: "URL to redirect after payment completion"
+              - column:
+                  name: success_url
+                  type: varchar(500)
+                  remarks: "URL to redirect on successful payment"
+              - column:
+                  name: failure_url
+                  type: varchar(500)
+                  remarks: "URL to redirect on failed payment"
+        - createIndex:
+            indexName: idx_merchants_application_type
+            tableName: merchants
+            columns:
+              - column:
+                  name: application_type

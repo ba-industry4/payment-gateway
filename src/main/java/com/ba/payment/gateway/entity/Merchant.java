@@ -53,6 +53,15 @@ public class Merchant {
     @Column(nullable = false)
     private Boolean active = true;
 
+    @Column(name = "application_type", length = 100)
+    private String applicationType;
+
+    @Column(name = "default_redirect_url", length = 500)
+    private String defaultRedirectUrl;
+
+    @Column(name = "default_callback_url", length = 500)
+    private String defaultCallbackUrl;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

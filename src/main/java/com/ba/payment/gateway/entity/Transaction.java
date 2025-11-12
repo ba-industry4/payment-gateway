@@ -77,6 +77,15 @@ public class Transaction {
     @Column(name = "failure_reason", columnDefinition = "TEXT")
     private String failureReason;
 
+    @Column(name = "redirect_url", length = 500)
+    private String redirectUrl;
+
+    @Column(name = "success_url", length = 500)
+    private String successUrl;
+
+    @Column(name = "failure_url", length = 500)
+    private String failureUrl;
+
     @Column(name = "processed_at")
     private LocalDateTime processedAt;
 

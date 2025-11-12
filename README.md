@@ -10,6 +10,8 @@ A comprehensive payment gateway service built with Java 21, Spring Boot 3.x, and
 ✅ **Complete entities, repositories, services, and controllers**
 ✅ **Security configuration** with JWT and API Key authentication
 ✅ **Payment provider framework** with Stripe and PayPal integration
+✅ **Multi-application support** with redirect URLs for different client types (WEB, MOBILE, POS)
+✅ **Flexible redirect handling** after payment completion
 ✅ **Docker setup** with docker-compose for easy deployment
 ✅ **SOLID principles** throughout the codebase
 
@@ -209,6 +211,40 @@ All sensitive configurations support environment variables:
 
 ## API Documentation
 
+### Multi-Application Support
+
+The payment gateway supports different types of client applications with flexible redirect handling:
+
+#### Client Application Types
+- **WEB**: Web-based applications (e-commerce sites, web portals)
+- **MOBILE**: Mobile applications (iOS, Android apps)
+- **POS**: Point-of-sale systems
+- **Other**: Custom application types
+
+#### Redirect URL Handling
+
+Each merchant can configure default redirect URLs for their application type:
+- **Default Redirect URL**: Generic URL for payment completion
+- **Default Callback URL**: URL for payment notifications/webhooks
+
+Payment requests can override these defaults with transaction-specific URLs:
+- **redirectUrl**: Generic redirect for any payment completion
+- **successUrl**: Specific redirect for successful payments
+- **failureUrl**: Specific redirect for failed payments
+
+**Priority Order**: Request URLs > Merchant Default URLs
+
+The payment response includes the appropriate redirect URL with transaction details appended as query parameters:
+- `transactionId`: Unique transaction identifier
+- `status`: Payment status (COMPLETED, FAILED, PENDING)
+- `amount`: Payment amount
+- `currency`: Payment currency
+
+**Example Redirect URL**:
+```
+https://yourapp.com/payment/success?transactionId=550e8400-e29b-41d4-a716-446655440000&status=COMPLETED&amount=100.00&currency=USD
+```
+
 ### Authentication
 
 #### Login
@@ -245,11 +281,35 @@ Content-Type: application/json
   "description": "Order #12345",
   "customerEmail": "customer@example.com",
   "customerName": "John Doe",
+  "redirectUrl": "https://yourapp.com/payment/callback",
+  "successUrl": "https://yourapp.com/payment/success",
+  "failureUrl": "https://yourapp.com/payment/failure",
   "metadata": {
     "orderId": "12345"
   }
 }
+
+Response:
+{
+  "transactionId": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "COMPLETED",
+  "amount": 100.00,
+  "currency": "USD",
+  "provider": "STRIPE",
+  "providerTransactionId": "ch_...",
+  "description": "Order #12345",
+  "redirectUrl": "https://yourapp.com/payment/success?transactionId=550e8400-e29b-41d4-a716-446655440000&status=COMPLETED&amount=100.00&currency=USD",
+  "processedAt": "2025-11-12T18:00:00Z",
+  "createdAt": "2025-11-12T17:59:55Z"
+}
 ```
+
+**Redirect URLs**:
+- `redirectUrl`: Generic redirect URL for payment completion (optional)
+- `successUrl`: Specific URL for successful payments (optional)
+- `failureUrl`: Specific URL for failed payments (optional)
+- If not provided in the request, merchant's default redirect URLs are used
+- The response includes the appropriate redirect URL with transaction details as query parameters
 
 #### Get Transaction
 ```http
