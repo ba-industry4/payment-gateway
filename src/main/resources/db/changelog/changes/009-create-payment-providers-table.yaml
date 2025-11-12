@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-create-payment-providers-table
+      author: payment-gateway
+      changes:
+        - createTable:
+            tableName: payment_providers
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: configuration
+                  type: jsonb
+              - column:
+                  name: supported_currencies
+                  type: text
+              - column:
+                  name: supported_payment_methods
+                  type: text
+              - column:
+                  name: fee_percentage
+                  type: decimal(5,2)
+              - column:
+                  name: fee_fixed
+                  type: decimal(19,4)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: idx_payment_providers_name
+            tableName: payment_providers
+            columns:
+              - column:
+                  name: name
+        - createIndex:
+            indexName: idx_payment_providers_type
+            tableName: payment_providers
+            columns:
+              - column:
+                  name: type

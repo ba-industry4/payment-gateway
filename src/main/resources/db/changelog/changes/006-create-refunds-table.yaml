@@ -1,0 +1,89 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-create-refunds-table
+      author: payment-gateway
+      changes:
+        - createTable:
+            tableName: refunds
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: refund_id
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: transaction_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_refunds_transaction_id
+                    references: transactions(id)
+              - column:
+                  name: amount
+                  type: decimal(19,4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: varchar(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(50)
+                  defaultValue: PENDING
+                  constraints:
+                    nullable: false
+              - column:
+                  name: provider_refund_id
+                  type: varchar(255)
+              - column:
+                  name: reason
+                  type: text
+              - column:
+                  name: metadata
+                  type: jsonb
+              - column:
+                  name: failure_reason
+                  type: text
+              - column:
+                  name: processed_at
+                  type: timestamp
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: idx_refunds_refund_id
+            tableName: refunds
+            columns:
+              - column:
+                  name: refund_id
+        - createIndex:
+            indexName: idx_refunds_transaction_id
+            tableName: refunds
+            columns:
+              - column:
+                  name: transaction_id
+        - createIndex:
+            indexName: idx_refunds_status
+            tableName: refunds
+            columns:
+              - column:
+                  name: status

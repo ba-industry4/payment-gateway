@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-merchants-table
+      author: payment-gateway
+      changes:
+        - createTable:
+            tableName: merchants
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_merchants_user_id
+                    references: users(id)
+                    deleteCascade: true
+              - column:
+                  name: business_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: business_email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: business_phone
+                  type: varchar(50)
+              - column:
+                  name: business_address
+                  type: text
+              - column:
+                  name: business_type
+                  type: varchar(100)
+              - column:
+                  name: tax_id
+                  type: varchar(100)
+              - column:
+                  name: status
+                  type: varchar(50)
+                  defaultValue: PENDING
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: idx_merchants_user_id
+            tableName: merchants
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            indexName: idx_merchants_business_email
+            tableName: merchants
+            columns:
+              - column:
+                  name: business_email
