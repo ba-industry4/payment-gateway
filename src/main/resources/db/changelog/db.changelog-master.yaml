@@ -19,3 +19,13 @@ databaseChangeLog:
       file: db/changelog/changes/009-create-payment-providers-table.yaml
   - include:
       file: db/changelog/changes/010-create-audit-logs-table.yaml
+  - include:
+      file: db/changelog/changes/011-create-applications-table.yaml
+  - include:
+      file: db/changelog/changes/012-create-application-providers-table.yaml
+  - include:
+      file: db/changelog/changes/013-add-application-id-to-api-keys.yaml
+  - include:
+      file: db/changelog/changes/014-add-application-id-to-transactions.yaml
+  - include:
+      file: db/changelog/changes/015-insert-spg-provider.yaml

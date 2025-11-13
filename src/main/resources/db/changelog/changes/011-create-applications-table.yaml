@@ -1,0 +1,91 @@
+databaseChangeLog:
+  - changeSet:
+      id: 011-create-applications-table
+      author: payment-gateway
+      changes:
+        - createTable:
+            tableName: applications
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: merchant_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_applications_merchant_id
+                    references: merchants(id)
+                    deleteCascade: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: app_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: app_key
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: webhook_url
+                  type: varchar(500)
+              - column:
+                  name: callback_url
+                  type: varchar(500)
+              - column:
+                  name: allowed_origins
+                  type: text
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: settings
+                  type: jsonb
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: idx_applications_merchant_id
+            tableName: applications
+            columns:
+              - column:
+                  name: merchant_id
+        - createIndex:
+            indexName: idx_applications_app_key
+            tableName: applications
+            columns:
+              - column:
+                  name: app_key
+        - createIndex:
+            indexName: idx_applications_active
+            tableName: applications
+            columns:
+              - column:
+                  name: active
+

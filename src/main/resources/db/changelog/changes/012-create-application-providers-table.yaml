@@ -1,0 +1,99 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-create-application-providers-table
+      author: payment-gateway
+      changes:
+        - createTable:
+            tableName: application_providers
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: application_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_app_providers_application_id
+                    references: applications(id)
+                    deleteCascade: true
+              - column:
+                  name: payment_provider_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_app_providers_provider_id
+                    references: payment_providers(id)
+              - column:
+                  name: priority
+                  type: integer
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_default
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: provider_config
+                  type: text
+                  remarks: "ENCRYPTED! Application-specific provider configuration (API keys, secrets, etc.)"
+              - column:
+                  name: supported_currencies
+                  type: text
+                  remarks: "Comma-separated list of currencies enabled for this app-provider combination"
+              - column:
+                  name: min_amount
+                  type: decimal(19,4)
+              - column:
+                  name: max_amount
+                  type: decimal(19,4)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            constraintName: uk_application_provider
+            tableName: application_providers
+            columnNames: application_id, payment_provider_id
+        - createIndex:
+            indexName: idx_app_providers_application_id
+            tableName: application_providers
+            columns:
+              - column:
+                  name: application_id
+        - createIndex:
+            indexName: idx_app_providers_provider_id
+            tableName: application_providers
+            columns:
+              - column:
+                  name: payment_provider_id
+        - createIndex:
+            indexName: idx_app_providers_default
+            tableName: application_providers
+            columns:
+              - column:
+                  name: is_default
+              - column:
+                  name: active
+

@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 013-add-application-id-to-api-keys
+      author: payment-gateway
+      changes:
+        - addColumn:
+            tableName: api_keys
+            columns:
+              - column:
+                  name: application_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_api_keys_application_id
+                    references: applications(id)
+                    deleteCascade: true
+        - createIndex:
+            indexName: idx_api_keys_application_id
+            tableName: api_keys
+            columns:
+              - column:
+                  name: application_id
+

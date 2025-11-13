@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 015-insert-spg-provider
+      author: payment-gateway
+      changes:
+        - insert:
+            tableName: payment_providers
+            columns:
+              - column:
+                  name: name
+                  value: SPG
+              - column:
+                  name: type
+                  value: CARD
+              - column:
+                  name: active
+                  valueBoolean: true
+              - column:
+                  name: supported_currencies
+                  value: USD,EUR,GBP,AUD,CAD,SGD,MYR,INR
+              - column:
+                  name: supported_payment_methods
+                  value: CREDIT_CARD,DEBIT_CARD,BANK_TRANSFER,E_WALLET
+              - column:
+                  name: fee_percentage
+                  valueNumeric: 2.5
+              - column:
+                  name: fee_fixed
+                  valueNumeric: 0.25
+              - column:
+                  name: configuration
+                  value: '{"api_version": "v1", "environment": "production", "supported_regions": ["APAC", "EMEA", "Americas"]}'
+

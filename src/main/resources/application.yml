@@ -26,6 +26,14 @@ security:
     expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
     refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000} # 7 days in milliseconds
 
+# Encryption configuration for sensitive data (provider credentials)
+encryption:
+  # CRITICAL: Generate a secure master key for production!
+  # Run: java -cp target/payment-gateway.jar com.ba.payment.gateway.security.EncryptionService
+  # Or use: EncryptionService.main() to generate a new key
+  # Store in secure vault (AWS Secrets Manager, HashiCorp Vault, etc.)
+  master-key: ${ENCRYPTION_MASTER_KEY:}
+
 payment:
   stripe:
     api-key: ${STRIPE_API_KEY:sk_test_your_stripe_api_key}

@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
     @Index(name = "idx_transactions_merchant_id", columnList = "merchant_id"),
     @Index(name = "idx_transactions_user_id", columnList = "user_id"),
     @Index(name = "idx_transactions_status", columnList = "status"),
-    @Index(name = "idx_transactions_provider_id", columnList = "provider_transaction_id")
+    @Index(name = "idx_transactions_provider_id", columnList = "provider_transaction_id"),
+    @Index(name = "idx_transactions_application_id", columnList = "application_id")
 })
 @Data
 @Builder
@@ -43,6 +44,10 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_method_id", foreignKey = @ForeignKey(name = "fk_transactions_payment_method_id"))
     private PaymentMethod paymentMethod;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "application_id", foreignKey = @ForeignKey(name = "fk_transactions_application_id"))
+    private Application application;
 
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal amount;

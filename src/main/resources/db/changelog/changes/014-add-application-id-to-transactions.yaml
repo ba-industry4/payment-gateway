@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 014-add-application-id-to-transactions
+      author: payment-gateway
+      changes:
+        - addColumn:
+            tableName: transactions
+            columns:
+              - column:
+                  name: application_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_transactions_application_id
+                    references: applications(id)
+        - createIndex:
+            indexName: idx_transactions_application_id
+            tableName: transactions
+            columns:
+              - column:
+                  name: application_id
+
